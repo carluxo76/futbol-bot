@@ -1,4 +1,6 @@
-import os
+
+
+   import os
 import httpx
 import anthropic
 from datetime import datetime, timedelta
@@ -290,7 +292,7 @@ _Análisis basado en datos reales. No garantiza resultado._"""
     try:
         client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
         message = client.messages.create(
-            model="claude-opus-4-5",
+            model="claude-3-5-sonnet-20241022",
             max_tokens=1000,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -350,7 +352,7 @@ _Análisis propio. No garantiza resultado._"""
     try:
         client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
         message = client.messages.create(
-            model="claude-opus-4-5",
+            model="claude-3-5-sonnet-20241022",
             max_tokens=1000,
             messages=[{"role": "user", "content": prompt}]
         )
