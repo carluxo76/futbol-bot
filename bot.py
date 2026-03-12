@@ -64,8 +64,8 @@ async def ask_claude(message: str) -> str:
                     "content-type": "application/json"
                 },
                 json={
-                    "model": "claude-haiku-4-5-20251001",
-                    "max_tokens": 1200,
+                    "model": "claude-sonnet-4-6",
+                    "max_tokens": 2000,
                     "system": SYSTEM_PROMPT,
                     "messages": [{"role": "user", "content": message}]
                 }
@@ -78,46 +78,4 @@ async def ask_claude(message: str) -> str:
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = """⚽ *Bot de Análisis de Fútbol*
 
-*¿Cómo usarme?*
-
-Escribe cualquier partido y te hago el análisis completo:
-
-`madrid vs barcelona`
-`alaves vs villarreal`
-`dortmund vs bayern`
-`liverpool vs arsenal`
-"""
-    await update.message.reply_text(msg, parse_mode='Markdown')
-
-async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    text = update.message.text.strip().lower()
-    await update.message.reply_text("⏳ Analizando...")
-
-    if re.search(r'\bvs\b|\bvs\.\b|contra|\bv\b', text):
-        prompt = f"Analiza el partido: {text}"
-    else:
-        prompt = text
-
-    response = await ask_claude(prompt)
-    
-    try:
-        await update.message.reply_text(response, parse_mode='Markdown')
-    except:
-        await update.message.reply_text(response)
-
-def main():
-    import httpx as h, time
-    try:
-        h.get(f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/deleteWebhook?drop_pending_updates=true", timeout=10)
-        time.sleep(2)
-    except:
-        pass
-    
-    app = Application.builder().token(TELEGRAM_TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    print("✅ Bot iniciado...")
-    app.run_polling(drop_pending_updates=True)
-
-if __name__ == '__main__':
-    main()
+*
