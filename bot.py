@@ -8,7 +8,7 @@ from telegram.ext import Application, MessageHandler, CommandHandler, filters, C
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip().replace("\n", "").replace("\r", "")
 
 SYSTEM_PROMPT = """Eres un analista experto en fútbol y apuestas deportivas. 
 Cuando te pidan analizar un partido responde SIEMPRE en este formato:
