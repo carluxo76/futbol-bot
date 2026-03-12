@@ -3,8 +3,8 @@ import httpx
 import anthropic
 from datetime import datetime, timedelta
 
-FOOTBALL_API_KEY = os.getenv("FOOTBALL_API_KEY")
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+FOOTBALL_API_KEY = os.getenv("FOOTBALL_API_KEY", "").strip()
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "").strip()
 
 FOOTBALL_BASE_URL = "https://api.football-data.org/v4"
 
