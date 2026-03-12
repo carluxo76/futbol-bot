@@ -13,44 +13,68 @@ API_FOOTBALL_BASE = "https://v3.football.api-sports.io"
 ODDS_BASE_URL = "https://api.the-odds-api.com/v4"
 
 TEAM_ALIASES = {
+    # España
     "madrid": "Real Madrid", "real madrid": "Real Madrid", "rm": "Real Madrid",
-    "barca": "Barcelona", "barça": "Barcelona", "barcelona": "Barcelona", "fcb": "Barcelona",
-    "atletico": "Atletico Madrid", "atleti": "Atletico Madrid", "atletico madrid": "Atletico Madrid",
+    "barca": "Barcelona", "barça": "Barcelona", "barcelona": "Barcelona", "fcb": "Barcelona", "fc barcelona": "Barcelona",
+    "atletico": "Atletico Madrid", "atleti": "Atletico Madrid", "atletico madrid": "Atletico Madrid", "atlético": "Atletico Madrid",
     "sevilla": "Sevilla", "valencia": "Valencia", "villarreal": "Villarreal",
     "betis": "Real Betis", "real betis": "Real Betis",
     "sociedad": "Real Sociedad", "real sociedad": "Real Sociedad",
-    "athletic": "Athletic Club", "bilbao": "Athletic Club",
+    "athletic": "Athletic Club", "bilbao": "Athletic Club", "athletic club": "Athletic Club",
     "osasuna": "Osasuna", "girona": "Girona", "getafe": "Getafe",
-    "rayo": "Rayo Vallecano", "celta": "Celta Vigo",
-    "mallorca": "Mallorca", "alaves": "Alaves", "alavés": "Alaves",
+    "rayo": "Rayo Vallecano", "rayo vallecano": "Rayo Vallecano",
+    "celta": "Celta Vigo", "celta vigo": "Celta Vigo",
+    "mallorca": "Mallorca", "alaves": "Alaves", "alavés": "Alaves", "deportivo alaves": "Alaves",
     "las palmas": "Las Palmas", "leganes": "Leganes", "leganés": "Leganes",
-    "espanol": "Espanyol", "espanyol": "Espanyol",
+    "espanol": "Espanyol", "espanyol": "Espanyol", "español": "Espanyol",
+    "valladolid": "Valladolid",
+    # Inglaterra
     "arsenal": "Arsenal", "chelsea": "Chelsea", "liverpool": "Liverpool",
     "city": "Manchester City", "man city": "Manchester City", "manchester city": "Manchester City",
     "united": "Manchester United", "man united": "Manchester United", "manchester united": "Manchester United",
     "tottenham": "Tottenham", "spurs": "Tottenham",
     "newcastle": "Newcastle", "aston villa": "Aston Villa", "west ham": "West Ham",
     "brighton": "Brighton", "everton": "Everton", "fulham": "Fulham",
-    "wolves": "Wolves", "brentford": "Brentford", "crystal palace": "Crystal Palace",
+    "wolves": "Wolves", "wolverhampton": "Wolves",
+    "brentford": "Brentford", "crystal palace": "Crystal Palace",
     "nottingham": "Nottingham Forest", "forest": "Nottingham Forest",
     "bournemouth": "Bournemouth", "leicester": "Leicester", "ipswich": "Ipswich",
-    "bayern": "Bayern Munich", "dortmund": "Borussia Dortmund", "bvb": "Borussia Dortmund",
-    "leverkusen": "Bayer Leverkusen", "leipzig": "RB Leipzig", "frankfurt": "Eintracht Frankfurt",
-    "stuttgart": "Stuttgart", "gladbach": "Monchengladbach", "wolfsburg": "Wolfsburg",
+    "southampton": "Southampton",
+    # Alemania
+    "bayern": "Bayern Munich", "fc bayern": "Bayern Munich", "bayern munich": "Bayern Munich",
+    "dortmund": "Borussia Dortmund", "bvb": "Borussia Dortmund",
+    "leverkusen": "Bayer Leverkusen", "bayer leverkusen": "Bayer Leverkusen",
+    "leipzig": "RB Leipzig", "rb leipzig": "RB Leipzig",
+    "frankfurt": "Eintracht Frankfurt", "eintracht": "Eintracht Frankfurt",
+    "stuttgart": "Stuttgart", "gladbach": "Monchengladbach",
+    "wolfsburg": "Wolfsburg", "hoffenheim": "Hoffenheim",
+    "freiburg": "Freiburg", "augsburg": "Augsburg", "mainz": "Mainz",
+    "bremen": "Werder Bremen", "werder": "Werder Bremen",
+    "heidenheim": "Heidenheim", "bochum": "Bochum", "kiel": "Holstein Kiel",
+    # Italia
     "juventus": "Juventus", "juve": "Juventus",
-    "inter": "Inter Milan", "inter milan": "Inter Milan",
+    "inter": "Inter Milan", "inter milan": "Inter Milan", "internazionale": "Inter Milan",
     "milan": "AC Milan", "ac milan": "AC Milan",
-    "napoli": "Napoli", "roma": "AS Roma", "lazio": "Lazio",
-    "fiorentina": "Fiorentina", "atalanta": "Atalanta",
-    "psg": "Paris Saint Germain", "paris": "Paris Saint Germain",
-    "marseille": "Marseille", "marsella": "Marseille",
-    "lyon": "Lyon", "monaco": "Monaco", "lille": "Lille",
-    "nice": "Nice", "lens": "Lens", "rennes": "Rennes",
-    "auxerre": "Auxerre", "strasbourg": "Strasbourg", "nantes": "Nantes",
-    "brest": "Brest", "reims": "Reims", "toulouse": "Toulouse",
-    "saint-etienne": "Saint-Etienne", "le havre": "Le Havre",
-    "benfica": "Benfica", "porto": "Porto", "sporting": "Sporting CP",
+    "napoli": "Napoli", "roma": "AS Roma", "as roma": "AS Roma",
+    "lazio": "Lazio", "fiorentina": "Fiorentina", "atalanta": "Atalanta",
+    "torino": "Torino", "bologna": "Bologna", "monza": "Monza",
+    "genoa": "Genoa", "lecce": "Lecce", "cagliari": "Cagliari",
+    "parma": "Parma", "como": "Como", "udinese": "Udinese", "empoli": "Empoli",
+    # Francia
+    "psg": "Paris Saint Germain", "paris": "Paris Saint Germain", "paris saint germain": "Paris Saint Germain",
+    "marseille": "Marseille", "marsella": "Marseille", "olympique marseille": "Marseille",
+    "lyon": "Lyon", "olympique lyon": "Lyon",
+    "monaco": "Monaco", "lille": "Lille", "nice": "Nice",
+    "lens": "Lens", "rennes": "Rennes", "auxerre": "Auxerre",
+    "strasbourg": "Strasbourg", "nantes": "Nantes", "reims": "Reims",
+    "toulouse": "Toulouse", "brest": "Brest", "montpellier": "Montpellier",
+    "le havre": "Le Havre", "angers": "Angers", "saint etienne": "Saint-Etienne",
+    # Portugal
+    "benfica": "Benfica", "porto": "Porto", "sporting": "Sporting CP", "sporting cp": "Sporting CP",
+    "braga": "Braga",
+    # Otros
     "ajax": "Ajax", "psv": "PSV", "feyenoord": "Feyenoord",
+    "celtic": "Celtic", "rangers": "Rangers",
 }
 
 ODDS_SPORTS = [
@@ -58,11 +82,13 @@ ODDS_SPORTS = [
     "soccer_italy_serie_a", "soccer_france_ligue_one",
     "soccer_uefa_champs_league", "soccer_portugal_primeira_liga",
     "soccer_spain_segunda_division", "soccer_france_ligue_two",
-    "soccer_netherlands_eredivisie",
+    "soccer_netherlands_eredivisie", "soccer_germany_bundesliga2",
+    "soccer_italy_serie_b", "soccer_england_league1",
 ]
 
 def resolve_team_name(alias: str) -> str:
-    return TEAM_ALIASES.get(alias.lower().strip(), alias.title())
+    key = alias.lower().strip()
+    return TEAM_ALIASES.get(key, alias.title())
 
 def is_today_or_tomorrow(date_str: str) -> bool:
     try:
@@ -75,13 +101,10 @@ def is_today_or_tomorrow(date_str: str) -> bool:
         return False
 
 async def get_team_recent_matches(team_name: str) -> str:
-    """Usa api-football.com para obtener partidos recientes."""
     headers = {"x-apisports-key": API_FOOTBALL_KEY}
-    season = datetime.now().year
-    
+
     async with httpx.AsyncClient() as client:
         try:
-            # Buscar equipo
             resp = await client.get(
                 f"{API_FOOTBALL_BASE}/teams",
                 headers=headers,
@@ -99,15 +122,10 @@ async def get_team_recent_matches(team_name: str) -> str:
             team_id = team["id"]
             team_full_name = team["name"]
 
-            # Obtener últimos 6 partidos
             resp2 = await client.get(
                 f"{API_FOOTBALL_BASE}/fixtures",
                 headers=headers,
-                params={
-                    "team": team_id,
-                    "last": 6,
-                    "status": "FT"
-                },
+                params={"team": team_id, "last": 6, "status": "FT"},
                 timeout=10
             )
             if resp2.status_code != 200:
@@ -221,42 +239,38 @@ async def get_upcoming_with_odds(bet_type: str) -> str:
                         outcomes = market.get("outcomes", [])
                         home_odd = next((o["price"] for o in outcomes if o["name"] == home), None)
                         draw_odd = next((o["price"] for o in outcomes if o["name"] == "Draw"), None)
-                        if home_odd and draw_odd and 1.20 <= home_odd <= 2.20:
+                        if home_odd and draw_odd and home_odd >= 1.30:
                             if not any(p["match"] == f"{home} vs {away}" for p in picks):
                                 picks.append({"match": f"{home} vs {away}", "time": commence, "bet": "1X (Local o Empate)", "odd": round(home_odd, 2)})
                         break
 
-        elif bet_type == "over_1.5":
+        elif bet_type == "over_2.5":
             for bm in bookmakers:
                 for market in bm.get("markets", []):
                     if market["key"] == "totals":
                         for o in market.get("outcomes", []):
-                            if o["name"] == "Over" and str(o.get("point", "")) == "1.5" and o["price"] >= 1.20:
+                            name = o.get("name", "")
+                            point = str(o.get("point", ""))
+                            price = o.get("price", 0)
+                            is_over = name in ["Over", "Más de", "Mas de", "Más", "Por encima"]
+                            if is_over and point == "2.5" and price >= 1.90:
                                 if not any(p["match"] == f"{home} vs {away}" for p in picks):
-                                    picks.append({"match": f"{home} vs {away}", "time": commence, "bet": "Mas de 1.5 goles", "odd": round(o["price"], 2)})
-                        break
-
-        elif bet_type == "under_3.5":
-            for bm in bookmakers:
-                for market in bm.get("markets", []):
-                    if market["key"] == "totals":
-                        for o in market.get("outcomes", []):
-                            if o["name"] == "Under" and str(o.get("point", "")) == "3.5" and o["price"] >= 1.20:
-                                if not any(p["match"] == f"{home} vs {away}" for p in picks):
-                                    picks.append({"match": f"{home} vs {away}", "time": commence, "bet": "Menos de 3.5 goles", "odd": round(o["price"], 2)})
+                                    picks.append({"match": f"{home} vs {away}", "time": commence, "bet": "Mas de 2.5 goles", "odd": round(price, 2)})
                         break
 
     picks = sorted(picks, key=lambda x: x["odd"], reverse=True)[:5]
 
     if not picks:
-        return "No encontre partidos hoy/manana con cuota mayor de 1.20 para ese mercado."
+        if bet_type == "1X":
+            return "No encontre partidos hoy/manana con cuota 1X mayor de 1.30."
+        else:
+            return "No encontre partidos hoy/manana con cuota Mas de 2.5 goles mayor de 1.90."
 
     titles = {
-        "1X": "Top 5 partidos 1X",
-        "over_1.5": "Top 5 Mas de 1.5 goles",
-        "under_3.5": "Top 5 Menos de 3.5 goles"
+        "1X": "Top 5 partidos 1X — cuota min. 1.30",
+        "over_2.5": "Top 5 Mas de 2.5 goles — cuota min. 1.90",
     }
-    lines = [f"*{titles[bet_type]}* — hoy/manana | cuota min. 1.20", ""]
+    lines = [f"*{titles[bet_type]}* — hoy/manana", ""]
     for i, p in enumerate(picks, 1):
         lines.append(f"{i}. {p['match']}")
         lines.append(f"   Hora: {p['time']} UTC")
