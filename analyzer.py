@@ -10,63 +10,34 @@ ODDS_API_KEY = os.getenv("ODDS_API_KEY", "").strip()
 FOOTBALL_BASE_URL = "https://api.football-data.org/v4"
 ODDS_BASE_URL = "https://api.the-odds-api.com/v4"
 
-# IDs fijos de equipos en football-data.org
-TEAM_IDS = {
-    "real madrid": 86, "fc barcelona": 81, "atletico de madrid": 78,
-    "sevilla fc": 559, "valencia cf": 95, "villarreal cf": 94,
-    "real betis": 90, "real sociedad": 92, "athletic club": 77,
-    "ca osasuna": 79, "girona fc": 298, "getafe cf": 554,
-    "rayo vallecano": 87, "celta de vigo": 558, "rcd mallorca": 89,
-    "deportivo alaves": 263, "ud las palmas": 275, "cd leganes": 745,
-    "rcd espanyol": 80,
-    "arsenal fc": 57, "chelsea fc": 61, "liverpool fc": 64,
-    "manchester city fc": 65, "manchester united fc": 66,
-    "tottenham hotspur fc": 73, "newcastle united fc": 67,
-    "aston villa fc": 58, "west ham united fc": 563,
-    "brighton & hove albion fc": 397, "everton fc": 62,
-    "fulham fc": 63, "wolverhampton wanderers fc": 76,
-    "brentford fc": 402, "crystal palace fc": 354,
-    "nottingham forest fc": 68, "afc bournemouth": 1044,
-    "fc bayern munchen": 5, "borussia dortmund": 4,
-    "bayer 04 leverkusen": 3, "rb leipzig": 721,
-    "eintracht frankfurt": 9, "vfb stuttgart": 10,
-    "juventus fc": 109, "fc internazionale milano": 108,
-    "ac milan": 98, "ssc napoli": 113, "as roma": 100,
-    "ss lazio": 110, "acf fiorentina": 99, "atalanta bc": 102,
-    "paris saint-germain fc": 524, "olympique de marseille": 516,
-    "olympique lyonnais": 523, "as monaco fc": 548,
-    "losc lille": 521, "sl benfica": 294, "fc porto": 297,
-    "sporting cp": 498,
-}
-
 TEAM_ALIASES = {
-    "madrid": "real madrid", "real madrid": "real madrid", "rm": "real madrid",
-    "barca": "fc barcelona", "barça": "fc barcelona", "barcelona": "fc barcelona", "fcb": "fc barcelona",
-    "atletico": "atletico de madrid", "atletico madrid": "atletico de madrid", "atleti": "atletico de madrid",
-    "sevilla": "sevilla fc", "valencia": "valencia cf", "villarreal": "villarreal cf",
-    "betis": "real betis", "sociedad": "real sociedad", "athletic": "athletic club", "bilbao": "athletic club",
-    "osasuna": "ca osasuna", "girona": "girona fc", "getafe": "getafe cf", "rayo": "rayo vallecano",
-    "celta": "celta de vigo", "mallorca": "rcd mallorca", "alaves": "deportivo alaves",
-    "las palmas": "ud las palmas", "leganes": "cd leganes", "espanol": "rcd espanyol", "espanyol": "rcd espanyol",
-    "arsenal": "arsenal fc", "chelsea": "chelsea fc", "liverpool": "liverpool fc",
-    "city": "manchester city fc", "man city": "manchester city fc", "manchester city": "manchester city fc",
-    "united": "manchester united fc", "man united": "manchester united fc", "manchester united": "manchester united fc",
-    "tottenham": "tottenham hotspur fc", "spurs": "tottenham hotspur fc",
-    "newcastle": "newcastle united fc", "aston villa": "aston villa fc", "west ham": "west ham united fc",
-    "brighton": "brighton & hove albion fc", "everton": "everton fc", "fulham": "fulham fc",
-    "wolves": "wolverhampton wanderers fc", "brentford": "brentford fc", "crystal palace": "crystal palace fc",
-    "nottingham": "nottingham forest fc", "forest": "nottingham forest fc",
-    "bournemouth": "afc bournemouth",
-    "bayern": "fc bayern munchen", "dortmund": "borussia dortmund", "bvb": "borussia dortmund",
-    "leverkusen": "bayer 04 leverkusen", "leipzig": "rb leipzig", "frankfurt": "eintracht frankfurt",
-    "stuttgart": "vfb stuttgart",
-    "juventus": "juventus fc", "juve": "juventus fc", "inter": "fc internazionale milano",
-    "inter milan": "fc internazionale milano", "milan": "ac milan", "ac milan": "ac milan",
-    "napoli": "ssc napoli", "roma": "as roma", "lazio": "ss lazio",
-    "fiorentina": "acf fiorentina", "atalanta": "atalanta bc",
-    "psg": "paris saint-germain fc", "paris": "paris saint-germain fc",
-    "marseille": "olympique de marseille", "lyon": "olympique lyonnais", "monaco": "as monaco fc",
-    "lille": "losc lille", "benfica": "sl benfica", "porto": "fc porto", "sporting": "sporting cp",
+    "madrid": "Real Madrid", "real madrid": "Real Madrid", "rm": "Real Madrid",
+    "barca": "Barcelona", "barça": "Barcelona", "barcelona": "Barcelona", "fcb": "Barcelona",
+    "atletico": "Atlético", "atletico madrid": "Atlético", "atleti": "Atlético",
+    "sevilla": "Sevilla", "valencia": "Valencia", "villarreal": "Villarreal",
+    "betis": "Betis", "sociedad": "Real Sociedad", "athletic": "Athletic Club", "bilbao": "Athletic Club",
+    "osasuna": "Osasuna", "girona": "Girona", "getafe": "Getafe", "rayo": "Rayo Vallecano",
+    "celta": "Celta", "mallorca": "Mallorca", "alaves": "Alavés",
+    "las palmas": "Las Palmas", "leganes": "Leganés", "espanol": "Espanyol", "espanyol": "Espanyol",
+    "arsenal": "Arsenal", "chelsea": "Chelsea", "liverpool": "Liverpool",
+    "city": "Manchester City", "man city": "Manchester City", "manchester city": "Manchester City",
+    "united": "Manchester United", "man united": "Manchester United", "manchester united": "Manchester United",
+    "tottenham": "Tottenham", "spurs": "Tottenham",
+    "newcastle": "Newcastle", "aston villa": "Aston Villa", "west ham": "West Ham",
+    "brighton": "Brighton", "everton": "Everton", "fulham": "Fulham",
+    "wolves": "Wolverhampton", "brentford": "Brentford", "crystal palace": "Crystal Palace",
+    "nottingham": "Nottingham Forest", "forest": "Nottingham Forest",
+    "bournemouth": "Bournemouth",
+    "bayern": "Bayern", "dortmund": "Dortmund", "bvb": "Dortmund",
+    "leverkusen": "Leverkusen", "leipzig": "RB Leipzig", "frankfurt": "Eintracht Frankfurt",
+    "stuttgart": "Stuttgart",
+    "juventus": "Juventus", "juve": "Juventus", "inter": "Inter",
+    "inter milan": "Inter", "milan": "AC Milan", "ac milan": "AC Milan",
+    "napoli": "Napoli", "roma": "Roma", "lazio": "Lazio",
+    "fiorentina": "Fiorentina", "atalanta": "Atalanta",
+    "psg": "Paris Saint-Germain", "paris": "Paris Saint-Germain",
+    "marseille": "Marseille", "lyon": "Lyon", "monaco": "Monaco",
+    "lille": "Lille", "benfica": "Benfica", "porto": "Porto", "sporting": "Sporting CP",
 }
 
 ODDS_SPORTS = [
@@ -77,10 +48,7 @@ ODDS_SPORTS = [
 ]
 
 def resolve_team_name(alias: str) -> str:
-    return TEAM_ALIASES.get(alias.lower().strip(), alias.lower().strip())
-
-def get_team_id(team_key: str) -> int:
-    return TEAM_IDS.get(team_key.lower().strip())
+    return TEAM_ALIASES.get(alias.lower().strip(), alias.title())
 
 def is_today_or_tomorrow(date_str: str) -> bool:
     try:
@@ -92,44 +60,59 @@ def is_today_or_tomorrow(date_str: str) -> bool:
     except:
         return False
 
-async def get_team_recent_matches(team_key: str) -> str:
-    team_id = get_team_id(team_key)
+async def search_team_id(team_name: str, client: httpx.AsyncClient) -> tuple:
+    """Busca el ID real del equipo en la API."""
+    headers = {"X-Auth-Token": FOOTBALL_API_KEY}
+    
+    # Buscar en las ligas principales directamente
+    leagues = ["PD", "PL", "BL1", "SA", "FL1", "CL", "PPL"]
+    
+    for league in leagues:
+        try:
+            resp = await client.get(
+                f"{FOOTBALL_BASE_URL}/competitions/{league}/teams",
+                headers=headers,
+                timeout=10
+            )
+            if resp.status_code == 200:
+                teams = resp.json().get("teams", [])
+                for team in teams:
+                    team_name_api = team.get("name", "").lower()
+                    team_short = team.get("shortName", "").lower()
+                    search = team_name.lower()
+                    if search in team_name_api or search in team_short or team_name_api in search:
+                        return team["id"], team["name"]
+        except Exception:
+            continue
+    
+    return None, team_name
+
+async def get_team_recent_matches(team_name: str) -> str:
     headers = {"X-Auth-Token": FOOTBALL_API_KEY}
     date_to = datetime.now().strftime("%Y-%m-%d")
     date_from = (datetime.now() - timedelta(days=90)).strftime("%Y-%m-%d")
 
     async with httpx.AsyncClient() as client:
         try:
-            if not team_id:
-                resp = await client.get(
-                    f"{FOOTBALL_BASE_URL}/teams",
-                    headers=headers,
-                    params={"name": team_key},
-                    timeout=10
-                )
-                if resp.status_code == 200:
-                    teams = resp.json().get("teams", [])
-                    if teams:
-                        team_id = teams[0]["id"]
-                        team_key = teams[0]["name"]
+            team_id, team_full_name = await search_team_id(team_name, client)
 
             if not team_id:
-                return f"Equipo no encontrado: {team_key}"
+                return f"Equipo no encontrado en las ligas disponibles: {team_name}"
 
-            resp2 = await client.get(
+            resp = await client.get(
                 f"{FOOTBALL_BASE_URL}/teams/{team_id}/matches",
                 headers=headers,
                 params={"status": "FINISHED", "dateFrom": date_from, "dateTo": date_to, "limit": 6},
                 timeout=10
             )
-            if resp2.status_code != 200:
-                return f"Sin datos recientes para {team_key} (error {resp2.status_code})"
+            if resp.status_code != 200:
+                return f"Sin datos recientes para {team_full_name}"
 
-            matches = resp2.json().get("matches", [])
+            matches = resp.json().get("matches", [])
             if not matches:
-                return f"Sin partidos recientes para {team_key}"
+                return f"Sin partidos recientes para {team_full_name}"
 
-            lines = [f"Ultimos partidos de {team_key.title()}:"]
+            lines = [f"Ultimos partidos de {team_full_name}:"]
             for m in matches:
                 home = m.get("homeTeam", {}).get("name", "?")
                 away = m.get("awayTeam", {}).get("name", "?")
@@ -138,13 +121,11 @@ async def get_team_recent_matches(team_key: str) -> str:
                 ag = score.get("away")
                 date = m.get("utcDate", "")[:10]
                 competition = m.get("competition", {}).get("name", "")
-                is_home = home.lower() == team_key.lower()
+                is_home = team_full_name.lower() in home.lower()
                 venue = "Local" if is_home else "Visita"
                 if hg is not None and ag is not None:
-                    if is_home:
-                        result = "W" if hg > ag else ("D" if hg == ag else "L")
-                    else:
-                        result = "W" if ag > hg else ("D" if hg == ag else "L")
+                    result = ("W" if (is_home and hg > ag) or (not is_home and ag > hg)
+                              else "D" if hg == ag else "L")
                 else:
                     result = "?"
                 lines.append(f"{date} | {competition} | {venue} | {home} {hg}-{ag} {away} | {result}")
@@ -152,7 +133,7 @@ async def get_team_recent_matches(team_key: str) -> str:
             return "\n".join(lines)
 
         except Exception as e:
-            return f"Error: {str(e)}"
+            return f"Error obteniendo datos de {team_name}: {str(e)}"
 
 async def get_real_odds(team1: str, team2: str) -> str:
     async with httpx.AsyncClient() as client:
@@ -169,8 +150,8 @@ async def get_real_odds(team1: str, team2: str) -> str:
                 for game in resp.json():
                     home = game.get("home_team", "").lower()
                     away = game.get("away_team", "").lower()
-                    t1 = team1.lower().replace("fc ", "").replace(" fc", "").replace("ssc ", "").replace("ac ", "")
-                    t2 = team2.lower().replace("fc ", "").replace(" fc", "").replace("ssc ", "").replace("ac ", "")
+                    t1 = team1.lower()
+                    t2 = team2.lower()
 
                     if (t1 in home or t1 in away) and (t2 in home or t2 in away):
                         bookmakers = game.get("bookmakers", [])
@@ -180,7 +161,7 @@ async def get_real_odds(team1: str, team2: str) -> str:
                         for bm in bookmakers[:2]:
                             for market in bm.get("markets", []):
                                 if market["key"] == "h2h":
-                                    lines.append(f"{bm['title']} - Resultado 1X2:")
+                                    lines.append(f"{bm['title']} - 1X2:")
                                     for o in market.get("outcomes", []):
                                         lines.append(f"  {o['name']}: {o['price']}")
                                 elif market["key"] == "totals":
@@ -215,7 +196,7 @@ async def get_upcoming_with_odds(bet_type: str) -> str:
     all_games = [g for g in all_games if is_today_or_tomorrow(g.get("commence_time", ""))]
 
     if not all_games:
-        return "No encontre partidos para hoy/mañana con cuotas disponibles."
+        return "No encontre partidos para hoy/manana con cuotas disponibles."
 
     picks = []
 
@@ -262,7 +243,7 @@ async def get_upcoming_with_odds(bet_type: str) -> str:
     picks = sorted(picks, key=lambda x: x["odd"], reverse=True)[:5]
 
     if not picks:
-        return "No encontre partidos hoy/mañana con cuota mayor de 1.20 para ese mercado."
+        return "No encontre partidos hoy/manana con cuota mayor de 1.20 para ese mercado."
 
     titles = {
         "1X": "Top 5 partidos 1X",
@@ -281,16 +262,16 @@ async def get_upcoming_with_odds(bet_type: str) -> str:
     return "\n".join(lines)
 
 async def analyze_match(team1_alias: str, team2_alias: str) -> str:
-    team1_key = resolve_team_name(team1_alias)
-    team2_key = resolve_team_name(team2_alias)
+    team1_name = resolve_team_name(team1_alias)
+    team2_name = resolve_team_name(team2_alias)
 
-    team1_recent = await get_team_recent_matches(team1_key)
-    team2_recent = await get_team_recent_matches(team2_key)
-    odds_info = await get_real_odds(team1_key, team2_key)
+    team1_recent = await get_team_recent_matches(team1_name)
+    team2_recent = await get_team_recent_matches(team2_name)
+    odds_info = await get_real_odds(team1_name, team2_name)
 
-    prompt = f"""Eres un analista experto en futbol y apuestas deportivas. Analiza este partido con los datos REALES proporcionados:
+    prompt = f"""Eres un analista experto en futbol y apuestas deportivas. Analiza este partido con los datos REALES:
 
-PARTIDO: {team1_key.title()} vs {team2_key.title()}
+PARTIDO: {team1_name} vs {team2_name}
 
 {team1_recent}
 
@@ -298,32 +279,32 @@ PARTIDO: {team1_key.title()} vs {team2_key.title()}
 
 {odds_info}
 
-Usa SOLO estos datos reales para el analisis. No inventes datos. Responde con este formato:
+Usa SOLO estos datos reales. Si los datos son correctos, haz el analisis completo. Responde con este formato:
 
-📊 *{team1_key.title()} vs {team2_key.title()}*
+📊 *{team1_name} vs {team2_name}*
 
-🏠 *Local/Visita:* [quien juega en casa segun tu conocimiento del calendario]
-🏆 *Competicion:* [liga o torneo]
+🏠 *Local/Visita:* [quien juega en casa]
+🏆 *Competicion:* [liga]
 
-📈 *Forma reciente {team1_key.title()}:*
-[analiza los resultados reales que te di, racha, goles marcados/recibidos en casa y fuera]
+📈 *Forma reciente {team1_name}:*
+[analiza resultados reales proporcionados]
 
-📉 *Forma reciente {team2_key.title()}:*
-[analiza los resultados reales que te di, racha, goles marcados/recibidos]
+📉 *Forma reciente {team2_name}:*
+[analiza resultados reales proporcionados]
 
 💪 *Motivacion:*
-- {team1_key.title()}: [objetivos actuales en la clasificacion]
-- {team2_key.title()}: [objetivos actuales en la clasificacion]
+- {team1_name}: [situacion en tabla]
+- {team2_name}: [situacion en tabla]
 
-⚽ *Analisis de goles:* [tendencia segun datos reales]
+⚽ *Analisis de goles:* [tendencia]
 🟨 *Estimado tarjetas:* [estimado]
 🚩 *Estimado corners:* [estimado]
 
 ---
 🎯 *APUESTA SUGERIDA:*
-✅ Resultado: [ganador o doble oportunidad con porcentaje]
-⚽ Goles: [mas/menos X.X con porcentaje]
-💰 Cuotas reales: [solo si estan disponibles en los datos]
+✅ Resultado: [ganador o doble oportunidad con %]
+⚽ Goles: [mas/menos X.X con %]
+💰 Cuotas reales: [si estan disponibles]
 
 _Analisis basado en datos reales. No garantiza resultado._"""
 
