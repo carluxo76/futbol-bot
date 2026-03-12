@@ -4,132 +4,65 @@ import anthropic
 from datetime import datetime, timedelta
 
 FOOTBALL_API_KEY = os.getenv("FOOTBALL_API_KEY", "").strip()
+API_FOOTBALL_KEY = os.getenv("API_FOOTBALL_KEY", "").strip()
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "").strip()
 ODDS_API_KEY = os.getenv("ODDS_API_KEY", "").strip()
 
 FOOTBALL_BASE_URL = "https://api.football-data.org/v4"
+API_FOOTBALL_BASE = "https://v3.football.api-sports.io"
 ODDS_BASE_URL = "https://api.the-odds-api.com/v4"
 
-# Mapa directo alias -> ID oficial en football-data.org
-TEAM_ID_MAP = {
-    # La Liga
-    "real madrid": 86, "madrid": 86, "rm": 86,
-    "barcelona": 81, "barca": 81, "barça": 81, "fcb": 81,
-    "atletico": 78, "atleti": 78, "atletico madrid": 78,
-    "sevilla": 559,
-    "valencia": 95,
-    "villarreal": 94,
-    "betis": 90, "real betis": 90,
-    "real sociedad": 92, "sociedad": 92,
-    "athletic": 77, "bilbao": 77, "athletic club": 77,
-    "osasuna": 79,
-    "girona": 298,
-    "getafe": 554,
-    "rayo": 87, "rayo vallecano": 87,
-    "celta": 558, "celta vigo": 558,
-    "mallorca": 89,
-    "alaves": 263, "alavés": 263, "deportivo alaves": 263,
-    "las palmas": 275,
-    "leganes": 745, "leganés": 745,
-    "espanyol": 80, "espanol": 80,
-    "valladolid": 250,
-    # Premier League
-    "arsenal": 57,
-    "chelsea": 61,
-    "liverpool": 64,
-    "manchester city": 65, "man city": 65, "city": 65,
-    "manchester united": 66, "man united": 66, "united": 66,
-    "tottenham": 73, "spurs": 73,
-    "newcastle": 67,
-    "aston villa": 58,
-    "west ham": 563,
-    "brighton": 397,
-    "everton": 62,
-    "fulham": 63,
-    "wolves": 76, "wolverhampton": 76,
-    "brentford": 402,
-    "crystal palace": 354,
-    "nottingham": 68, "forest": 68,
-    "bournemouth": 1044,
-    "leicester": 338,
-    "ipswich": 57, 
-    "southampton": 340,
-    # Bundesliga
-    "bayern": 5, "fc bayern": 5,
-    "dortmund": 4, "bvb": 4,
-    "leverkusen": 3,
-    "leipzig": 721, "rb leipzig": 721,
-    "frankfurt": 9, "eintracht frankfurt": 9,
-    "stuttgart": 10,
-    "gladbach": 18,
-    "wolfsburg": 11,
-    "hoffenheim": 720,
-    "freiburg": 17,
-    "augsburg": 16,
-    "mainz": 15,
-    "bremen": 13, "werder": 13,
-    "heidenheim": 1138,
-    "bochum": 130,
-    "kiel": 1150,
-    # Serie A
-    "juventus": 109, "juve": 109,
-    "inter": 108, "inter milan": 108,
-    "milan": 98, "ac milan": 98,
-    "napoli": 113,
-    "roma": 100, "as roma": 100,
-    "lazio": 110,
-    "fiorentina": 99,
-    "atalanta": 102,
-    "torino": 586,
-    "bologna": 103,
-    "monza": 5911,
-    "genoa": 107,
-    "lecce": 5890,
-    "cagliari": 104,
-    "parma": 112,
-    "como": 2933,
-    "venezia": 450,
-    "udinese": 115,
-    "empoli": 106,
-    "hellas verona": 450,
-    # Ligue 1
-    "psg": 524, "paris": 524, "paris saint-germain": 524,
-    "marseille": 516,
-    "lyon": 523,
-    "monaco": 548,
-    "lille": 521,
-    "nice": 522,
-    "lens": 546,
-    "rennes": 529,
-    "strasbourg": 527,
-    "nantes": 543,
-    "reims": 547,
-    "toulouse": 519,
-    "brest": 542,
-    "montpellier": 545,
-    "le havre": 525,
-    "angers": 544,
-    "saint-etienne": 518,
-    # Champions League / Portugal
-    "benfica": 294,
-    "porto": 297,
-    "sporting": 498, "sporting cp": 498,
-    "braga": 5601,
+TEAM_ALIASES = {
+    "madrid": "Real Madrid", "real madrid": "Real Madrid", "rm": "Real Madrid",
+    "barca": "Barcelona", "barça": "Barcelona", "barcelona": "Barcelona", "fcb": "Barcelona",
+    "atletico": "Atletico Madrid", "atleti": "Atletico Madrid", "atletico madrid": "Atletico Madrid",
+    "sevilla": "Sevilla", "valencia": "Valencia", "villarreal": "Villarreal",
+    "betis": "Real Betis", "real betis": "Real Betis",
+    "sociedad": "Real Sociedad", "real sociedad": "Real Sociedad",
+    "athletic": "Athletic Club", "bilbao": "Athletic Club",
+    "osasuna": "Osasuna", "girona": "Girona", "getafe": "Getafe",
+    "rayo": "Rayo Vallecano", "celta": "Celta Vigo",
+    "mallorca": "Mallorca", "alaves": "Alaves", "alavés": "Alaves",
+    "las palmas": "Las Palmas", "leganes": "Leganes", "leganés": "Leganes",
+    "espanol": "Espanyol", "espanyol": "Espanyol",
+    "arsenal": "Arsenal", "chelsea": "Chelsea", "liverpool": "Liverpool",
+    "city": "Manchester City", "man city": "Manchester City", "manchester city": "Manchester City",
+    "united": "Manchester United", "man united": "Manchester United", "manchester united": "Manchester United",
+    "tottenham": "Tottenham", "spurs": "Tottenham",
+    "newcastle": "Newcastle", "aston villa": "Aston Villa", "west ham": "West Ham",
+    "brighton": "Brighton", "everton": "Everton", "fulham": "Fulham",
+    "wolves": "Wolves", "brentford": "Brentford", "crystal palace": "Crystal Palace",
+    "nottingham": "Nottingham Forest", "forest": "Nottingham Forest",
+    "bournemouth": "Bournemouth", "leicester": "Leicester", "ipswich": "Ipswich",
+    "bayern": "Bayern Munich", "dortmund": "Borussia Dortmund", "bvb": "Borussia Dortmund",
+    "leverkusen": "Bayer Leverkusen", "leipzig": "RB Leipzig", "frankfurt": "Eintracht Frankfurt",
+    "stuttgart": "Stuttgart", "gladbach": "Monchengladbach", "wolfsburg": "Wolfsburg",
+    "juventus": "Juventus", "juve": "Juventus",
+    "inter": "Inter Milan", "inter milan": "Inter Milan",
+    "milan": "AC Milan", "ac milan": "AC Milan",
+    "napoli": "Napoli", "roma": "AS Roma", "lazio": "Lazio",
+    "fiorentina": "Fiorentina", "atalanta": "Atalanta",
+    "psg": "Paris Saint Germain", "paris": "Paris Saint Germain",
+    "marseille": "Marseille", "marsella": "Marseille",
+    "lyon": "Lyon", "monaco": "Monaco", "lille": "Lille",
+    "nice": "Nice", "lens": "Lens", "rennes": "Rennes",
+    "auxerre": "Auxerre", "strasbourg": "Strasbourg", "nantes": "Nantes",
+    "brest": "Brest", "reims": "Reims", "toulouse": "Toulouse",
+    "saint-etienne": "Saint-Etienne", "le havre": "Le Havre",
+    "benfica": "Benfica", "porto": "Porto", "sporting": "Sporting CP",
+    "ajax": "Ajax", "psv": "PSV", "feyenoord": "Feyenoord",
 }
 
 ODDS_SPORTS = [
     "soccer_spain_la_liga", "soccer_epl", "soccer_germany_bundesliga",
     "soccer_italy_serie_a", "soccer_france_ligue_one",
     "soccer_uefa_champs_league", "soccer_portugal_primeira_liga",
-    "soccer_spain_segunda_division",
+    "soccer_spain_segunda_division", "soccer_france_ligue_two",
+    "soccer_netherlands_eredivisie",
 ]
 
-def resolve_team(alias: str) -> tuple:
-    """Devuelve (team_id, display_name)"""
-    key = alias.lower().strip()
-    team_id = TEAM_ID_MAP.get(key)
-    display = alias.title()
-    return team_id, display
+def resolve_team_name(alias: str) -> str:
+    return TEAM_ALIASES.get(alias.lower().strip(), alias.title())
 
 def is_today_or_tomorrow(date_str: str) -> bool:
     try:
@@ -141,52 +74,67 @@ def is_today_or_tomorrow(date_str: str) -> bool:
     except:
         return False
 
-async def get_team_recent_matches(alias: str) -> str:
-    team_id, display_name = resolve_team(alias)
-    headers = {"X-Auth-Token": FOOTBALL_API_KEY}
-    date_to = datetime.now().strftime("%Y-%m-%d")
-    date_from = (datetime.now() - timedelta(days=90)).strftime("%Y-%m-%d")
-
-    if not team_id:
-        return f"Equipo '{alias}' no encontrado en la base de datos."
-
+async def get_team_recent_matches(team_name: str) -> str:
+    """Usa api-football.com para obtener partidos recientes."""
+    headers = {"x-apisports-key": API_FOOTBALL_KEY}
+    season = datetime.now().year
+    
     async with httpx.AsyncClient() as client:
         try:
+            # Buscar equipo
             resp = await client.get(
-                f"{FOOTBALL_BASE_URL}/teams/{team_id}/matches",
+                f"{API_FOOTBALL_BASE}/teams",
                 headers=headers,
-                params={"status": "FINISHED", "dateFrom": date_from, "dateTo": date_to, "limit": 6},
+                params={"search": team_name},
                 timeout=10
             )
             if resp.status_code != 200:
-                return f"Error obteniendo partidos de {display_name} (status {resp.status_code})"
+                return f"Error buscando {team_name}"
 
-            matches = resp.json().get("matches", [])
-            if not matches:
-                return f"Sin partidos recientes para {display_name}"
+            teams = resp.json().get("response", [])
+            if not teams:
+                return f"Equipo no encontrado: {team_name}"
 
-            # Obtener nombre real del equipo desde la API
-            team_info = resp.json().get("matches", [{}])[0]
-            home_name = team_info.get("homeTeam", {}).get("name", "")
-            away_name = team_info.get("awayTeam", {}).get("name", "")
+            team = teams[0]["team"]
+            team_id = team["id"]
+            team_full_name = team["name"]
 
-            lines = [f"Ultimos partidos (ID {team_id}):"]
-            for m in matches:
-                home = m.get("homeTeam", {}).get("name", "?")
-                away = m.get("awayTeam", {}).get("name", "?")
-                score = m.get("score", {}).get("fullTime", {})
-                hg = score.get("home")
-                ag = score.get("away")
-                date = m.get("utcDate", "")[:10]
-                competition = m.get("competition", {}).get("name", "")
-                is_home = m.get("homeTeam", {}).get("id") == team_id
+            # Obtener últimos 6 partidos
+            resp2 = await client.get(
+                f"{API_FOOTBALL_BASE}/fixtures",
+                headers=headers,
+                params={
+                    "team": team_id,
+                    "last": 6,
+                    "status": "FT"
+                },
+                timeout=10
+            )
+            if resp2.status_code != 200:
+                return f"Sin datos recientes para {team_full_name}"
+
+            fixtures = resp2.json().get("response", [])
+            if not fixtures:
+                return f"Sin partidos recientes para {team_full_name}"
+
+            lines = [f"Ultimos partidos de {team_full_name}:"]
+            for f in fixtures:
+                home = f["teams"]["home"]["name"]
+                away = f["teams"]["away"]["name"]
+                hg = f["goals"]["home"]
+                ag = f["goals"]["away"]
+                date = f["fixture"]["date"][:10]
+                league = f["league"]["name"]
+                is_home = f["teams"]["home"]["id"] == team_id
                 venue = "Local" if is_home else "Visita"
-                if hg is not None and ag is not None:
-                    result = ("W" if (is_home and hg > ag) or (not is_home and ag > hg)
-                              else "D" if hg == ag else "L")
+                winner = f["teams"]["home"]["winner"]
+                if winner is None:
+                    result = "D"
+                elif (is_home and winner) or (not is_home and not winner):
+                    result = "W"
                 else:
-                    result = "?"
-                lines.append(f"{date} | {competition} | {venue} | {home} {hg}-{ag} {away} | {result}")
+                    result = "L"
+                lines.append(f"{date} | {league} | {venue} | {home} {hg}-{ag} {away} | {result}")
 
             return "\n".join(lines)
 
@@ -320,41 +268,39 @@ async def get_upcoming_with_odds(bet_type: str) -> str:
     return "\n".join(lines)
 
 async def analyze_match(team1_alias: str, team2_alias: str) -> str:
-    team1_id, team1_display = resolve_team(team1_alias)
-    team2_id, team2_display = resolve_team(team2_alias)
+    team1_name = resolve_team_name(team1_alias)
+    team2_name = resolve_team_name(team2_alias)
 
-    team1_recent = await get_team_recent_matches(team1_alias)
-    team2_recent = await get_team_recent_matches(team2_alias)
-    odds_info = await get_real_odds(team1_alias, team2_alias)
+    team1_recent = await get_team_recent_matches(team1_name)
+    team2_recent = await get_team_recent_matches(team2_name)
+    odds_info = await get_real_odds(team1_name, team2_name)
 
     prompt = f"""Eres un analista experto en futbol y apuestas deportivas. Analiza este partido con los datos REALES:
 
-PARTIDO SOLICITADO: {team1_display} vs {team2_display}
+PARTIDO: {team1_name} vs {team2_name}
 
-DATOS {team1_display}:
 {team1_recent}
 
-DATOS {team2_display}:
 {team2_recent}
 
 {odds_info}
 
-Haz el analisis completo con estos datos. Formato:
+Haz el analisis completo. Formato:
 
-📊 *{team1_display} vs {team2_display}*
+📊 *{team1_name} vs {team2_name}*
 
 🏠 *Local/Visita:* [quien juega en casa]
 🏆 *Competicion:* [liga]
 
-📈 *Forma reciente {team1_display}:*
+📈 *Forma reciente {team1_name}:*
 [analiza los resultados reales]
 
-📉 *Forma reciente {team2_display}:*
+📉 *Forma reciente {team2_name}:*
 [analiza los resultados reales]
 
 💪 *Motivacion:*
-- {team1_display}: [situacion actual]
-- {team2_display}: [situacion actual]
+- {team1_name}: [situacion actual]
+- {team2_name}: [situacion actual]
 
 ⚽ *Analisis de goles:* [tendencia]
 🟨 *Estimado tarjetas:* [estimado]
