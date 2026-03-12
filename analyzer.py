@@ -211,6 +211,7 @@ async def get_upcoming_with_odds(bet_type: str) -> str:
                     params={"apiKey": ODDS_API_KEY, "regions": "eu", "markets": "h2h,totals", "oddsFormat": "decimal"},
                     timeout=10
                 )
+                print(f"DEBUG {sport}: status={resp.status_code} key={ODDS_API_KEY[:8]}...")
                 if resp.status_code == 200:
                     for g in resp.json():
                         # Normalizar campos en español a inglés
