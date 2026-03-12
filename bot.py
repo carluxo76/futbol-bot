@@ -51,7 +51,7 @@ async def ask_claude(message: str) -> str:
             resp = await client.post(
                 "https://api.anthropic.com/v1/messages",
                 headers={
-                    "x-api-key": ANTHROPIC_API_KEY,
+                    "x-api-key": ANTHROPIC_API_KEY.strip(),
                     "anthropic-version": "2023-06-01",
                     "content-type": "application/json"
                 },
