@@ -71,14 +71,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 *¿Cómo usarme?*
 
-🔍 *Análisis de partido:*
+Escribe cualquier partido y te hago el análisis completo:
+
 `madrid vs barcelona`
 `alaves vs villarreal`
 `dortmund vs bayern`
-
-📊 *Picks recomendados:*
-`1X` → partidos con local favorito
-`mas 2.5` → partidos con muchos goles
+`liverpool vs arsenal`
 """
     await update.message.reply_text(msg, parse_mode='Markdown')
 
@@ -88,10 +86,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if re.search(r'\bvs\b|\bvs\.\b|contra|\bv\b', text):
         prompt = f"Analiza el partido: {text}"
-    elif '1x' in text:
-        prompt = "Dame 5 picks 1X (local o empate) para los próximos días en las principales ligas europeas. Para cada partido indica equipos, liga, por qué el local tiene ventaja y probabilidad estimada."
-    elif 'mas 2.5' in text or 'más 2.5' in text or '+2.5' in text:
-        prompt = "Dame 5 picks de más de 2.5 goles para los próximos días en las principales ligas europeas. Para cada partido indica equipos, liga, por qué esperas muchos goles y probabilidad estimada."
     else:
         prompt = text
 
