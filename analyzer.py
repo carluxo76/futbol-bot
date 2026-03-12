@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 FOOTBALL_API_KEY = os.getenv("FOOTBALL_API_KEY", "").strip()
 API_FOOTBALL_KEY = os.getenv("API_FOOTBALL_KEY", "").strip()
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "").strip()
-ODDS_API_KEY = os.getenv("ODDS_API_KEY", "").strip()
+ODDS_API_KEY = os.environ.get("ODDS_KEY", "") or os.environ.get("ODDS_API_KEY", "")
 
 FOOTBALL_BASE_URL = "https://api.football-data.org/v4"
 API_FOOTBALL_BASE = "https://v3.football.api-sports.io"
