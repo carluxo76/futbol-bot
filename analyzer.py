@@ -8,113 +8,147 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "").strip()
 
 FOOTBALL_BASE_URL = "https://api.football-data.org/v4"
 
-# Diccionario de alias de equipos
-TEAM_ALIASES = {
-    # España
-    "madrid": "Real Madrid",
-    "real madrid": "Real Madrid",
-    "rm": "Real Madrid",
-    "barca": "FC Barcelona",
-    "barça": "FC Barcelona",
-    "barcelona": "FC Barcelona",
-    "fcb": "FC Barcelona",
-    "atletico": "Atlético de Madrid",
-    "atletico madrid": "Atlético de Madrid",
-    "atleti": "Atlético de Madrid",
-    "sevilla": "Sevilla FC",
-    "valencia": "Valencia CF",
-    "villarreal": "Villarreal CF",
-    "betis": "Real Betis",
-    "sociedad": "Real Sociedad",
-    "athletic": "Athletic Club",
-    "bilbao": "Athletic Club",
-    "osasuna": "CA Osasuna",
-    "girona": "Girona FC",
-    "getafe": "Getafe CF",
-    "rayo": "Rayo Vallecano",
-    "celta": "Celta de Vigo",
-    "mallorca": "RCD Mallorca",
-    "alaves": "Deportivo Alavés",
-    "las palmas": "UD Las Palmas",
-    "leganes": "CD Leganés",
-    "espanol": "RCD Espanyol",
-    "espanyol": "RCD Espanyol",
-    
+# IDs oficiales en football-data.org
+TEAM_IDS = {
+    "real madrid": 86,
+    "madrid": 86,
+    "rm": 86,
+    "fc barcelona": 81,
+    "barcelona": 81,
+    "barca": 81,
+    "barça": 81,
+    "fcb": 81,
+    "atletico de madrid": 78,
+    "atletico madrid": 78,
+    "atletico": 78,
+    "atleti": 78,
+    "sevilla fc": 559,
+    "sevilla": 559,
+    "valencia cf": 95,
+    "valencia": 95,
+    "villarreal cf": 94,
+    "villarreal": 94,
+    "real betis": 90,
+    "betis": 90,
+    "real sociedad": 92,
+    "sociedad": 92,
+    "athletic club": 77,
+    "athletic": 77,
+    "bilbao": 77,
+    "osasuna": 79,
+    "girona fc": 298,
+    "girona": 298,
+    "getafe cf": 82,
+    "getafe": 82,
+    "rayo vallecano": 87,
+    "rayo": 87,
+    "celta de vigo": 558,
+    "celta": 558,
+    "rcd mallorca": 89,
+    "mallorca": 89,
+    "deportivo alaves": 263,
+    "alaves": 263,
+    "ud las palmas": 275,
+    "las palmas": 275,
+    "cd leganes": 745,
+    "leganes": 745,
+    "rcd espanyol": 80,
+    "espanyol": 80,
+    "espanol": 80,
     # Inglaterra
-    "arsenal": "Arsenal FC",
-    "chelsea": "Chelsea FC",
-    "liverpool": "Liverpool FC",
-    "city": "Manchester City FC",
-    "man city": "Manchester City FC",
-    "manchester city": "Manchester City FC",
-    "united": "Manchester United FC",
-    "man united": "Manchester United FC",
-    "manchester united": "Manchester United FC",
-    "tottenham": "Tottenham Hotspur FC",
-    "spurs": "Tottenham Hotspur FC",
-    "newcastle": "Newcastle United FC",
-    "aston villa": "Aston Villa FC",
-    "west ham": "West Ham United FC",
-    "brighton": "Brighton & Hove Albion FC",
-    "everton": "Everton FC",
-    "fulham": "Fulham FC",
-    "wolves": "Wolverhampton Wanderers FC",
-    "wolverhampton": "Wolverhampton Wanderers FC",
-    "brentford": "Brentford FC",
-    "crystal palace": "Crystal Palace FC",
-    "nottingham": "Nottingham Forest FC",
-    "forest": "Nottingham Forest FC",
-    "bournemouth": "AFC Bournemouth",
-    "leicester": "Leicester City FC",
-    "ipswich": "Ipswich Town FC",
-    "southampton": "Southampton FC",
-    
+    "arsenal fc": 57,
+    "arsenal": 57,
+    "chelsea fc": 61,
+    "chelsea": 61,
+    "liverpool fc": 64,
+    "liverpool": 64,
+    "manchester city fc": 65,
+    "manchester city": 65,
+    "man city": 65,
+    "city": 65,
+    "manchester united fc": 66,
+    "manchester united": 66,
+    "man united": 66,
+    "united": 66,
+    "tottenham hotspur fc": 73,
+    "tottenham": 73,
+    "spurs": 73,
+    "newcastle united fc": 67,
+    "newcastle": 67,
+    "aston villa fc": 58,
+    "aston villa": 58,
+    "west ham united fc": 563,
+    "west ham": 563,
+    "brighton": 397,
+    "everton fc": 62,
+    "everton": 62,
+    "fulham fc": 63,
+    "fulham": 63,
+    "brentford fc": 402,
+    "brentford": 402,
+    "crystal palace fc": 354,
+    "crystal palace": 354,
+    "nottingham forest fc": 351,
+    "nottingham": 351,
+    "forest": 351,
+    "bournemouth": 1044,
+    "wolverhampton": 76,
+    "wolves": 76,
+    "leicester city fc": 338,
+    "leicester": 338,
+    "ipswich town fc": 349,
+    "ipswich": 349,
+    "southampton fc": 340,
+    "southampton": 340,
     # Alemania
-    "bayern": "FC Bayern München",
-    "dortmund": "Borussia Dortmund",
-    "bvb": "Borussia Dortmund",
-    "leverkusen": "Bayer 04 Leverkusen",
-    "leipzig": "RB Leipzig",
-    "frankfurt": "Eintracht Frankfurt",
-    "stuttgart": "VfB Stuttgart",
-    "gladbach": "Borussia Mönchengladbach",
-    "hoffenheim": "TSG 1899 Hoffenheim",
-    "wolfsburg": "VfL Wolfsburg",
-    
+    "fc bayern munchen": 5,
+    "bayern munich": 5,
+    "bayern": 5,
+    "borussia dortmund": 4,
+    "dortmund": 4,
+    "bvb": 4,
+    "bayer 04 leverkusen": 3,
+    "leverkusen": 3,
+    "rb leipzig": 721,
+    "leipzig": 721,
+    "eintracht frankfurt": 19,
+    "frankfurt": 19,
+    "vfb stuttgart": 10,
+    "stuttgart": 10,
     # Italia
-    "juventus": "Juventus FC",
-    "juve": "Juventus FC",
-    "inter": "FC Internazionale Milano",
-    "inter milan": "FC Internazionale Milano",
-    "milan": "AC Milan",
-    "ac milan": "AC Milan",
-    "napoli": "SSC Napoli",
-    "roma": "AS Roma",
-    "lazio": "SS Lazio",
-    "fiorentina": "ACF Fiorentina",
-    "atalanta": "Atalanta BC",
-    "torino": "Torino FC",
-    "bologna": "Bologna FC 1909",
-    
+    "juventus fc": 109,
+    "juventus": 109,
+    "juve": 109,
+    "fc internazionale milano": 108,
+    "inter milan": 108,
+    "inter": 108,
+    "ac milan": 98,
+    "milan": 98,
+    "ssc napoli": 113,
+    "napoli": 113,
+    "as roma": 100,
+    "roma": 100,
+    "ss lazio": 110,
+    "lazio": 110,
+    "atalanta bc": 102,
+    "atalanta": 102,
     # Francia
-    "psg": "Paris Saint-Germain FC",
-    "paris": "Paris Saint-Germain FC",
-    "marseille": "Olympique de Marseille",
-    "lyon": "Olympique Lyonnais",
-    "monaco": "AS Monaco FC",
-    "lille": "LOSC Lille",
-    "nice": "OGC Nice",
-    "lens": "RC Lens",
-    "rennes": "Stade Rennais FC",
-    
+    "paris saint-germain fc": 524,
+    "psg": 524,
+    "paris": 524,
+    "olympique de marseille": 516,
+    "marseille": 516,
+    "olympique lyonnais": 523,
+    "lyon": 523,
+    "as monaco fc": 548,
+    "monaco": 548,
     # Portugal
-    "benfica": "SL Benfica",
-    "porto": "FC Porto",
-    "sporting": "Sporting CP",
-    "sporting cp": "Sporting CP",
-    
-    # Champions
-    "psg": "Paris Saint-Germain FC",
+    "sl benfica": 294,
+    "benfica": 294,
+    "fc porto": 503,
+    "porto": 503,
+    "sporting cp": 498,
+    "sporting": 498,
 }
 
 LEAGUE_IDS = {
@@ -125,39 +159,14 @@ LEAGUE_IDS = {
     "FL1": "Ligue 1",
     "PPL": "Primeira Liga",
     "CL": "Champions League",
-    "EC": "Euros",
-    "WC": "World Cup",
 }
 
-def resolve_team_name(alias: str) -> str:
-    """Convierte alias en nombre oficial del equipo."""
-    return TEAM_ALIASES.get(alias.lower().strip(), alias.title())
-
-async def get_team_data(team_name: str) -> dict:
-    """Busca datos del equipo en la API."""
-    headers = {"X-Auth-Token": FOOTBALL_API_KEY}
-    
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.get(
-                f"{FOOTBALL_BASE_URL}/teams",
-                headers=headers,
-                params={"name": team_name},
-                timeout=10
-            )
-            if response.status_code == 200:
-                data = response.json()
-                teams = data.get("teams", [])
-                if teams:
-                    return teams[0]
-        except Exception as e:
-            print(f"Error buscando equipo: {e}")
-    return None
+def resolve_team_id(alias: str) -> int:
+    return TEAM_IDS.get(alias.lower().strip())
 
 async def get_team_matches(team_id: int, limit: int = 5) -> list:
-    """Obtiene últimos partidos de un equipo."""
     headers = {"X-Auth-Token": FOOTBALL_API_KEY}
-    date_from = (datetime.now() - timedelta(days=90)).strftime("%Y-%m-%d")
+    date_from = (datetime.now() - timedelta(days=120)).strftime("%Y-%m-%d")
     date_to = datetime.now().strftime("%Y-%m-%d")
     
     async with httpx.AsyncClient() as client:
@@ -171,7 +180,7 @@ async def get_team_matches(team_id: int, limit: int = 5) -> list:
                     "dateTo": date_to,
                     "limit": limit
                 },
-                timeout=10
+                timeout=15
             )
             if response.status_code == 200:
                 data = response.json()
@@ -181,10 +190,9 @@ async def get_team_matches(team_id: int, limit: int = 5) -> list:
     return []
 
 async def get_upcoming_matches() -> list:
-    """Obtiene partidos de los próximos 3 días de las ligas principales."""
     headers = {"X-Auth-Token": FOOTBALL_API_KEY}
     date_from = datetime.now().strftime("%Y-%m-%d")
-    date_to = (datetime.now() + timedelta(days=3)).strftime("%Y-%m-%d")
+    date_to = (datetime.now() + timedelta(days=4)).strftime("%Y-%m-%d")
     
     all_matches = []
     leagues = ["PL", "PD", "BL1", "SA", "FL1", "CL"]
@@ -200,7 +208,7 @@ async def get_upcoming_matches() -> list:
                         "dateTo": date_to,
                         "status": "SCHEDULED"
                     },
-                    timeout=10
+                    timeout=15
                 )
                 if response.status_code == 200:
                     data = response.json()
@@ -213,79 +221,81 @@ async def get_upcoming_matches() -> list:
     
     return all_matches
 
-def format_matches_for_ai(matches: list, team_name: str, is_home: bool) -> str:
-    """Formatea partidos para enviar a la IA."""
+def format_matches(matches: list) -> str:
     result = []
-    for m in matches:
+    for m in matches[:5]:
         home = m.get("homeTeam", {}).get("name", "?")
         away = m.get("awayTeam", {}).get("name", "?")
         score = m.get("score", {}).get("fullTime", {})
-        home_goals = score.get("home", "?")
-        away_goals = score.get("away", "?")
+        hg = score.get("home", "?")
+        ag = score.get("away", "?")
         date = m.get("utcDate", "")[:10]
-        competition = m.get("competition", {}).get("name", "")
-        result.append(f"{date} | {competition} | {home} {home_goals}-{away_goals} {away}")
-    return "\n".join(result)
+        comp = m.get("competition", {}).get("name", "")
+        result.append(f"{date} | {comp} | {home} {hg}-{ag} {away}")
+    return "\n".join(result) if result else "Sin datos disponibles"
 
 async def analyze_match(team1_alias: str, team2_alias: str) -> str:
-    """Análisis completo de un partido."""
-    team1_name = resolve_team_name(team1_alias)
-    team2_name = resolve_team_name(team2_alias)
+    team1_id = resolve_team_id(team1_alias)
+    team2_id = resolve_team_id(team2_alias)
     
-    # Obtener datos de ambos equipos
-    team1_data = await get_team_data(team1_name)
-    team2_data = await get_team_data(team2_name)
+    team1_name = team1_alias.title()
+    team2_name = team2_alias.title()
     
-    team1_matches_raw = []
-    team2_matches_raw = []
+    for key, val in TEAM_IDS.items():
+        if val == team1_id and len(key) > len(team1_alias):
+            team1_name = key.title()
+            break
+    for key, val in TEAM_IDS.items():
+        if val == team2_id and len(key) > len(team2_alias):
+            team2_name = key.title()
+            break
+
+    team1_recent = "Sin datos disponibles"
+    team2_recent = "Sin datos disponibles"
+
+    if team1_id:
+        matches = await get_team_matches(team1_id)
+        team1_recent = format_matches(matches)
     
-    if team1_data:
-        team1_matches_raw = await get_team_matches(team1_data["id"])
-    if team2_data:
-        team2_matches_raw = await get_team_matches(team2_data["id"])
-    
-    # Formatear datos para la IA
-    team1_recent = format_matches_for_ai(team1_matches_raw, team1_name, True) or "Sin datos disponibles"
-    team2_recent = format_matches_for_ai(team2_matches_raw, team2_name, False) or "Sin datos disponibles"
-    
-    team1_area = team1_data.get("area", {}).get("name", "") if team1_data else ""
-    team2_area = team2_data.get("area", {}).get("name", "") if team2_data else ""
-    
-    # Construir prompt para Claude
-    prompt = f"""Eres un analista experto en fútbol y mercados de apuestas. Analiza este partido:
+    if team2_id:
+        matches = await get_team_matches(team2_id)
+        team2_recent = format_matches(matches)
+
+    prompt = f"""Eres un analista experto en fútbol y apuestas deportivas. Analiza este partido:
 
 PARTIDO: {team1_name} vs {team2_name}
 
-ÚLTIMOS 5 PARTIDOS DE {team1_name} ({team1_area}):
+ÚLTIMOS PARTIDOS DE {team1_name}:
 {team1_recent}
 
-ÚLTIMOS 5 PARTIDOS DE {team2_name} ({team2_area}):
+ÚLTIMOS PARTIDOS DE {team2_name}:
 {team2_recent}
 
-Basándote en estos datos reales, proporciona un análisis conciso con este formato EXACTO:
+Basándote en estos datos y en tu conocimiento del fútbol europeo actual, proporciona este análisis EXACTO:
 
 📊 *{team1_name} vs {team2_name}*
 
-🏠 *Local/Visita:* Determina quién juega en casa basándote en tu conocimiento del calendario actual.
+🏠 *Local/Visita:* [quién juega en casa y por qué]
+🏆 *Competición:* [nombre de la competición]
 
-📈 *Forma reciente {team1_name}:* [análisis breve]
-📉 *Forma reciente {team2_name}:* [análisis breve]
+📈 *Forma {team1_name}:* [análisis breve de sus últimos resultados]
+📉 *Forma {team2_name}:* [análisis breve de sus últimos resultados]
 
 💪 *Motivación:*
-- {team1_name}: [motivación real]
-- {team2_name}: [motivación real]
+- {team1_name}: [motivación real para este partido]
+- {team2_name}: [motivación real para este partido]
 
-⚽ *Análisis de goles:* [tendencia goles, más 1.5 o menos 3.5]
-🟨 *Estimado tarjetas:* [estimado]
-🚩 *Estimado corners:* [estimado]
+⚽ *Tendencia goles:* [más 1.5 o menos 3.5, con justificación]
+🟨 *Tarjetas estimadas:* [número estimado]
+🚩 *Corners estimados:* [número estimado]
 
 ---
 🎯 *APUESTA SUGERIDA:*
-✅ Resultado: [ganador o doble oportunidad] con [X]%
-⚽ Goles: [más/menos X.X]
-📊 Confianza general: [X]%
+✅ [ganador o doble oportunidad] — [X]%
+⚽ [más/menos X.X goles]
+📊 Confianza: [X]%
 
-_Análisis basado en datos reales. No garantiza resultado._"""
+_Análisis orientativo. No garantiza resultado._"""
 
     try:
         client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
@@ -299,15 +309,13 @@ _Análisis basado en datos reales. No garantiza resultado._"""
         return f"❌ Error al generar análisis: {str(e)}"
 
 async def get_recommendations(bet_type: str) -> str:
-    """Obtiene recomendaciones de partidos según tipo de apuesta."""
     upcoming = await get_upcoming_matches()
     
     if not upcoming:
         return "❌ No encontré partidos próximos. Intenta más tarde."
     
-    # Formatear partidos para la IA
     matches_text = []
-    for m in upcoming[:30]:  # máximo 30 partidos para no saturar
+    for m in upcoming[:30]:
         home = m.get("homeTeam", {}).get("name", "?")
         away = m.get("awayTeam", {}).get("name", "?")
         date = m.get("utcDate", "")[:16].replace("T", " ")
@@ -318,22 +326,22 @@ async def get_recommendations(bet_type: str) -> str:
     
     if bet_type == "1X":
         instruction = "Selecciona los 5 partidos donde el equipo LOCAL tiene mayor probabilidad de ganar o empatar (doble oportunidad 1X). Cuota mínima estimada 1.30."
-        title = "🏠 Top 5 partidos para apostar *1X* (Local o Empate)"
+        title = "🏠 Top 5 para apostar *1X* (Local o Empate)"
     elif bet_type == "over_1.5":
         instruction = "Selecciona los 5 partidos con mayor probabilidad de terminar con MÁS DE 1.5 goles. Cuota mínima estimada 1.30."
-        title = "⚽ Top 5 partidos para *Más de 1.5 goles*"
-    else:  # under_3.5
+        title = "⚽ Top 5 para *Más de 1.5 goles*"
+    else:
         instruction = "Selecciona los 5 partidos con mayor probabilidad de terminar con MENOS DE 3.5 goles. Cuota mínima estimada 1.30."
-        title = "🔒 Top 5 partidos para *Menos de 3.5 goles*"
+        title = "🔒 Top 5 para *Menos de 3.5 goles*"
     
-    prompt = f"""Eres un analista experto en apuestas de fútbol. 
+    prompt = f"""Eres un analista experto en apuestas de fútbol.
 
 PARTIDOS PRÓXIMOS:
 {matches_str}
 
 TAREA: {instruction}
 
-Responde con este formato EXACTO para cada partido:
+Responde con este formato EXACTO:
 
 {title}
 
@@ -341,11 +349,11 @@ Responde con este formato EXACTO para cada partido:
    📅 [Fecha y hora]
    📊 Probabilidad: [X]%
    💰 Cuota estimada: [X.XX]
-   📝 Razón: [motivo breve en 1 línea]
+   📝 [motivo breve]
 
 [repetir para los 5 partidos]
 
-_Análisis propio. No garantiza resultado._"""
+_Análisis orientativo. No garantiza resultado._"""
 
     try:
         client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
