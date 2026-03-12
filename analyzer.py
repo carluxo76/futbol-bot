@@ -238,8 +238,8 @@ async def get_upcoming_with_odds(bet_type: str) -> str:
                 for market in bm.get("markets", []):
                     if market["key"] == "h2h":
                         outcomes = market.get("outcomes", [])
-                        home_odd = next((o["price"] for o in outcomes if o["name"] == home), None)
-                        draw_odd = next((o["price"] for o in outcomes if o["name"] == "Draw"), None)
+                        home_odd = next((o["price"] for o in outcomes if o.get("name","").lower() == home.lower()), None)
+                        draw_odd = next((o["price"] for o in outcomes if o.get("name","").lower() in ["draw", "empate"]), None)
                         if home_odd and draw_odd and home_odd >= 1.30:
                             if not any(p["match"] == f"{home} vs {away}" for p in picks):
                                 picks.append({"match": f"{home} vs {away}", "time": commence, "bet": "1X (Local o Empate)", "odd": round(home_odd, 2)})
