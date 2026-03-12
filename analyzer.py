@@ -91,12 +91,13 @@ def resolve_team_name(alias: str) -> str:
     return TEAM_ALIASES.get(key, alias.title())
 
 def is_today_or_tomorrow(date_str: str) -> bool:
+    """Acepta partidos de hoy, manana y pasado manana."""
     try:
         game_date = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
         now = datetime.now().astimezone()
         today = now.date()
         tomorrow = today + timedelta(days=1)
-        return game_date.date() in [today, tomorrow]
+        return game_date.date() in [today, tomorrow, today + timedelta(days=2)]
     except:
         return False
 
