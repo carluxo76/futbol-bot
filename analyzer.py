@@ -10,48 +10,77 @@ ODDS_API_KEY = os.getenv("ODDS_API_KEY", "").strip()
 FOOTBALL_BASE_URL = "https://api.football-data.org/v4"
 ODDS_BASE_URL = "https://api.the-odds-api.com/v4"
 
+# IDs fijos de equipos en football-data.org
+TEAM_IDS = {
+    "real madrid": 86, "fc barcelona": 81, "atletico de madrid": 78,
+    "sevilla fc": 559, "valencia cf": 95, "villarreal cf": 94,
+    "real betis": 90, "real sociedad": 92, "athletic club": 77,
+    "ca osasuna": 79, "girona fc": 298, "getafe cf": 554,
+    "rayo vallecano": 87, "celta de vigo": 558, "rcd mallorca": 89,
+    "deportivo alaves": 263, "ud las palmas": 275, "cd leganes": 745,
+    "rcd espanyol": 80,
+    "arsenal fc": 57, "chelsea fc": 61, "liverpool fc": 64,
+    "manchester city fc": 65, "manchester united fc": 66,
+    "tottenham hotspur fc": 73, "newcastle united fc": 67,
+    "aston villa fc": 58, "west ham united fc": 563,
+    "brighton & hove albion fc": 397, "everton fc": 62,
+    "fulham fc": 63, "wolverhampton wanderers fc": 76,
+    "brentford fc": 402, "crystal palace fc": 354,
+    "nottingham forest fc": 68, "afc bournemouth": 1044,
+    "fc bayern munchen": 5, "borussia dortmund": 4,
+    "bayer 04 leverkusen": 3, "rb leipzig": 721,
+    "eintracht frankfurt": 9, "vfb stuttgart": 10,
+    "juventus fc": 109, "fc internazionale milano": 108,
+    "ac milan": 98, "ssc napoli": 113, "as roma": 100,
+    "ss lazio": 110, "acf fiorentina": 99, "atalanta bc": 102,
+    "paris saint-germain fc": 524, "olympique de marseille": 516,
+    "olympique lyonnais": 523, "as monaco fc": 548,
+    "losc lille": 521, "sl benfica": 294, "fc porto": 297,
+    "sporting cp": 498,
+}
+
 TEAM_ALIASES = {
-    "madrid": "Real Madrid", "real madrid": "Real Madrid", "rm": "Real Madrid",
-    "barca": "FC Barcelona", "barça": "FC Barcelona", "barcelona": "FC Barcelona", "fcb": "FC Barcelona",
-    "atletico": "Atlético de Madrid", "atletico madrid": "Atlético de Madrid", "atleti": "Atlético de Madrid",
-    "sevilla": "Sevilla FC", "valencia": "Valencia CF", "villarreal": "Villarreal CF",
-    "betis": "Real Betis", "sociedad": "Real Sociedad", "athletic": "Athletic Club", "bilbao": "Athletic Club",
-    "osasuna": "CA Osasuna", "girona": "Girona FC", "getafe": "Getafe CF", "rayo": "Rayo Vallecano",
-    "celta": "Celta de Vigo", "mallorca": "RCD Mallorca", "alaves": "Deportivo Alavés",
-    "las palmas": "UD Las Palmas", "leganes": "CD Leganés", "espanol": "RCD Espanyol", "espanyol": "RCD Espanyol",
-    "arsenal": "Arsenal FC", "chelsea": "Chelsea FC", "liverpool": "Liverpool FC",
-    "city": "Manchester City FC", "man city": "Manchester City FC", "manchester city": "Manchester City FC",
-    "united": "Manchester United FC", "man united": "Manchester United FC", "manchester united": "Manchester United FC",
-    "tottenham": "Tottenham Hotspur FC", "spurs": "Tottenham Hotspur FC",
-    "newcastle": "Newcastle United FC", "aston villa": "Aston Villa FC", "west ham": "West Ham United FC",
-    "brighton": "Brighton & Hove Albion FC", "everton": "Everton FC", "fulham": "Fulham FC",
-    "wolves": "Wolverhampton Wanderers FC", "brentford": "Brentford FC", "crystal palace": "Crystal Palace FC",
-    "nottingham": "Nottingham Forest FC", "forest": "Nottingham Forest FC",
-    "bournemouth": "AFC Bournemouth", "leicester": "Leicester City FC", "ipswich": "Ipswich Town FC",
-    "bayern": "FC Bayern München", "dortmund": "Borussia Dortmund", "bvb": "Borussia Dortmund",
-    "leverkusen": "Bayer 04 Leverkusen", "leipzig": "RB Leipzig", "frankfurt": "Eintracht Frankfurt",
-    "stuttgart": "VfB Stuttgart", "gladbach": "Borussia Mönchengladbach", "wolfsburg": "VfL Wolfsburg",
-    "juventus": "Juventus FC", "juve": "Juventus FC", "inter": "FC Internazionale Milano",
-    "milan": "AC Milan", "ac milan": "AC Milan", "napoli": "SSC Napoli", "roma": "AS Roma",
-    "lazio": "SS Lazio", "fiorentina": "ACF Fiorentina", "atalanta": "Atalanta BC",
-    "psg": "Paris Saint-Germain FC", "paris": "Paris Saint-Germain FC",
-    "marseille": "Olympique de Marseille", "lyon": "Olympique Lyonnais", "monaco": "AS Monaco FC",
-    "benfica": "SL Benfica", "porto": "FC Porto", "sporting": "Sporting CP",
+    "madrid": "real madrid", "real madrid": "real madrid", "rm": "real madrid",
+    "barca": "fc barcelona", "barça": "fc barcelona", "barcelona": "fc barcelona", "fcb": "fc barcelona",
+    "atletico": "atletico de madrid", "atletico madrid": "atletico de madrid", "atleti": "atletico de madrid",
+    "sevilla": "sevilla fc", "valencia": "valencia cf", "villarreal": "villarreal cf",
+    "betis": "real betis", "sociedad": "real sociedad", "athletic": "athletic club", "bilbao": "athletic club",
+    "osasuna": "ca osasuna", "girona": "girona fc", "getafe": "getafe cf", "rayo": "rayo vallecano",
+    "celta": "celta de vigo", "mallorca": "rcd mallorca", "alaves": "deportivo alaves",
+    "las palmas": "ud las palmas", "leganes": "cd leganes", "espanol": "rcd espanyol", "espanyol": "rcd espanyol",
+    "arsenal": "arsenal fc", "chelsea": "chelsea fc", "liverpool": "liverpool fc",
+    "city": "manchester city fc", "man city": "manchester city fc", "manchester city": "manchester city fc",
+    "united": "manchester united fc", "man united": "manchester united fc", "manchester united": "manchester united fc",
+    "tottenham": "tottenham hotspur fc", "spurs": "tottenham hotspur fc",
+    "newcastle": "newcastle united fc", "aston villa": "aston villa fc", "west ham": "west ham united fc",
+    "brighton": "brighton & hove albion fc", "everton": "everton fc", "fulham": "fulham fc",
+    "wolves": "wolverhampton wanderers fc", "brentford": "brentford fc", "crystal palace": "crystal palace fc",
+    "nottingham": "nottingham forest fc", "forest": "nottingham forest fc",
+    "bournemouth": "afc bournemouth",
+    "bayern": "fc bayern munchen", "dortmund": "borussia dortmund", "bvb": "borussia dortmund",
+    "leverkusen": "bayer 04 leverkusen", "leipzig": "rb leipzig", "frankfurt": "eintracht frankfurt",
+    "stuttgart": "vfb stuttgart",
+    "juventus": "juventus fc", "juve": "juventus fc", "inter": "fc internazionale milano",
+    "inter milan": "fc internazionale milano", "milan": "ac milan", "ac milan": "ac milan",
+    "napoli": "ssc napoli", "roma": "as roma", "lazio": "ss lazio",
+    "fiorentina": "acf fiorentina", "atalanta": "atalanta bc",
+    "psg": "paris saint-germain fc", "paris": "paris saint-germain fc",
+    "marseille": "olympique de marseille", "lyon": "olympique lyonnais", "monaco": "as monaco fc",
+    "lille": "losc lille", "benfica": "sl benfica", "porto": "fc porto", "sporting": "sporting cp",
 }
 
 ODDS_SPORTS = [
-    "soccer_spain_la_liga",
-    "soccer_epl",
-    "soccer_germany_bundesliga",
-    "soccer_italy_serie_a",
-    "soccer_france_ligue_one",
-    "soccer_uefa_champs_league",
-    "soccer_portugal_primeira_liga",
+    "soccer_spain_la_liga", "soccer_epl", "soccer_germany_bundesliga",
+    "soccer_italy_serie_a", "soccer_france_ligue_one",
+    "soccer_uefa_champs_league", "soccer_portugal_primeira_liga",
     "soccer_spain_segunda_division",
 ]
 
 def resolve_team_name(alias: str) -> str:
-    return TEAM_ALIASES.get(alias.lower().strip(), alias.title())
+    return TEAM_ALIASES.get(alias.lower().strip(), alias.lower().strip())
+
+def get_team_id(team_key: str) -> int:
+    return TEAM_IDS.get(team_key.lower().strip())
 
 def is_today_or_tomorrow(date_str: str) -> bool:
     try:
@@ -63,28 +92,29 @@ def is_today_or_tomorrow(date_str: str) -> bool:
     except:
         return False
 
-async def get_team_recent_matches(team_name: str) -> str:
+async def get_team_recent_matches(team_key: str) -> str:
+    team_id = get_team_id(team_key)
     headers = {"X-Auth-Token": FOOTBALL_API_KEY}
     date_to = datetime.now().strftime("%Y-%m-%d")
-    date_from = (datetime.now() - timedelta(days=60)).strftime("%Y-%m-%d")
+    date_from = (datetime.now() - timedelta(days=90)).strftime("%Y-%m-%d")
 
     async with httpx.AsyncClient() as client:
         try:
-            resp = await client.get(
-                f"{FOOTBALL_BASE_URL}/teams",
-                headers=headers,
-                params={"name": team_name},
-                timeout=10
-            )
-            if resp.status_code != 200:
-                return f"Sin datos para {team_name}"
+            if not team_id:
+                resp = await client.get(
+                    f"{FOOTBALL_BASE_URL}/teams",
+                    headers=headers,
+                    params={"name": team_key},
+                    timeout=10
+                )
+                if resp.status_code == 200:
+                    teams = resp.json().get("teams", [])
+                    if teams:
+                        team_id = teams[0]["id"]
+                        team_key = teams[0]["name"]
 
-            teams = resp.json().get("teams", [])
-            if not teams:
-                return f"Equipo no encontrado: {team_name}"
-
-            team_id = teams[0]["id"]
-            team_full_name = teams[0]["name"]
+            if not team_id:
+                return f"Equipo no encontrado: {team_key}"
 
             resp2 = await client.get(
                 f"{FOOTBALL_BASE_URL}/teams/{team_id}/matches",
@@ -93,33 +123,36 @@ async def get_team_recent_matches(team_name: str) -> str:
                 timeout=10
             )
             if resp2.status_code != 200:
-                return f"Sin partidos recientes para {team_full_name}"
+                return f"Sin datos recientes para {team_key} (error {resp2.status_code})"
 
             matches = resp2.json().get("matches", [])
             if not matches:
-                return f"Sin partidos recientes para {team_full_name}"
+                return f"Sin partidos recientes para {team_key}"
 
-            lines = [f"Últimos partidos de {team_full_name}:"]
+            lines = [f"Ultimos partidos de {team_key.title()}:"]
             for m in matches:
                 home = m.get("homeTeam", {}).get("name", "?")
                 away = m.get("awayTeam", {}).get("name", "?")
                 score = m.get("score", {}).get("fullTime", {})
-                hg = score.get("home", "?")
-                ag = score.get("away", "?")
+                hg = score.get("home")
+                ag = score.get("away")
                 date = m.get("utcDate", "")[:10]
                 competition = m.get("competition", {}).get("name", "")
-                is_home = home == team_full_name
-                venue = "🏠 Local" if is_home else "✈️ Visita"
-                if is_home:
-                    result = "✅ W" if (isinstance(hg, int) and isinstance(ag, int) and hg > ag) else ("🤝 D" if hg == ag else "❌ L")
+                is_home = home.lower() == team_key.lower()
+                venue = "Local" if is_home else "Visita"
+                if hg is not None and ag is not None:
+                    if is_home:
+                        result = "W" if hg > ag else ("D" if hg == ag else "L")
+                    else:
+                        result = "W" if ag > hg else ("D" if hg == ag else "L")
                 else:
-                    result = "✅ W" if (isinstance(hg, int) and isinstance(ag, int) and ag > hg) else ("🤝 D" if hg == ag else "❌ L")
+                    result = "?"
                 lines.append(f"{date} | {competition} | {venue} | {home} {hg}-{ag} {away} | {result}")
 
             return "\n".join(lines)
 
         except Exception as e:
-            return f"Error obteniendo datos: {str(e)}"
+            return f"Error: {str(e)}"
 
 async def get_real_odds(team1: str, team2: str) -> str:
     async with httpx.AsyncClient() as client:
@@ -136,25 +169,25 @@ async def get_real_odds(team1: str, team2: str) -> str:
                 for game in resp.json():
                     home = game.get("home_team", "").lower()
                     away = game.get("away_team", "").lower()
-                    t1 = team1.lower().replace("fc ", "").replace(" fc", "")
-                    t2 = team2.lower().replace("fc ", "").replace(" fc", "")
+                    t1 = team1.lower().replace("fc ", "").replace(" fc", "").replace("ssc ", "").replace("ac ", "")
+                    t2 = team2.lower().replace("fc ", "").replace(" fc", "").replace("ssc ", "").replace("ac ", "")
 
                     if (t1 in home or t1 in away) and (t2 in home or t2 in away):
                         bookmakers = game.get("bookmakers", [])
                         if not bookmakers:
                             continue
-                        result_text = [f"📊 Cuotas reales: {game['home_team']} vs {game['away_team']}"]
+                        lines = [f"Cuotas reales: {game['home_team']} vs {game['away_team']}"]
                         for bm in bookmakers[:2]:
                             for market in bm.get("markets", []):
                                 if market["key"] == "h2h":
-                                    result_text.append(f"\n🏦 {bm['title']} (Resultado 1X2):")
+                                    lines.append(f"{bm['title']} - Resultado 1X2:")
                                     for o in market.get("outcomes", []):
-                                        result_text.append(f"  {o['name']}: {o['price']}")
+                                        lines.append(f"  {o['name']}: {o['price']}")
                                 elif market["key"] == "totals":
-                                    result_text.append(f"\n🏦 {bm['title']} (Goles):")
+                                    lines.append(f"{bm['title']} - Goles:")
                                     for o in market.get("outcomes", []):
-                                        result_text.append(f"  {o['name']} {o.get('point','')}: {o['price']}")
-                        return "\n".join(result_text)
+                                        lines.append(f"  {o['name']} {o.get('point','')}: {o['price']}")
+                        return "\n".join(lines)
 
             except Exception:
                 continue
@@ -179,11 +212,10 @@ async def get_upcoming_with_odds(bet_type: str) -> str:
             except Exception:
                 continue
 
-    # Filtrar solo hoy y mañana
     all_games = [g for g in all_games if is_today_or_tomorrow(g.get("commence_time", ""))]
 
     if not all_games:
-        return "❌ No encontré partidos para hoy/mañana con cuotas disponibles."
+        return "No encontre partidos para hoy/mañana con cuotas disponibles."
 
     picks = []
 
@@ -202,9 +234,8 @@ async def get_upcoming_with_odds(bet_type: str) -> str:
                         outcomes = market.get("outcomes", [])
                         home_odd = next((o["price"] for o in outcomes if o["name"] == home), None)
                         draw_odd = next((o["price"] for o in outcomes if o["name"] == "Draw"), None)
-                        if home_odd and draw_odd and 1.30 <= home_odd <= 2.20:
-                            already = any(p["match"] == f"{home} vs {away}" for p in picks)
-                            if not already:
+                        if home_odd and draw_odd and 1.20 <= home_odd <= 2.20:
+                            if not any(p["match"] == f"{home} vs {away}" for p in picks):
                                 picks.append({"match": f"{home} vs {away}", "time": commence, "bet": "1X (Local o Empate)", "odd": round(home_odd, 2)})
                         break
 
@@ -213,10 +244,9 @@ async def get_upcoming_with_odds(bet_type: str) -> str:
                 for market in bm.get("markets", []):
                     if market["key"] == "totals":
                         for o in market.get("outcomes", []):
-                            if o["name"] == "Over" and str(o.get("point", "")) == "1.5" and o["price"] >= 1.30:
-                                already = any(p["match"] == f"{home} vs {away}" for p in picks)
-                                if not already:
-                                    picks.append({"match": f"{home} vs {away}", "time": commence, "bet": "Más de 1.5 goles", "odd": round(o["price"], 2)})
+                            if o["name"] == "Over" and str(o.get("point", "")) == "1.5" and o["price"] >= 1.20:
+                                if not any(p["match"] == f"{home} vs {away}" for p in picks):
+                                    picks.append({"match": f"{home} vs {away}", "time": commence, "bet": "Mas de 1.5 goles", "odd": round(o["price"], 2)})
                         break
 
         elif bet_type == "under_3.5":
@@ -224,78 +254,78 @@ async def get_upcoming_with_odds(bet_type: str) -> str:
                 for market in bm.get("markets", []):
                     if market["key"] == "totals":
                         for o in market.get("outcomes", []):
-                            if o["name"] == "Under" and str(o.get("point", "")) == "3.5" and o["price"] >= 1.30:
-                                already = any(p["match"] == f"{home} vs {away}" for p in picks)
-                                if not already:
+                            if o["name"] == "Under" and str(o.get("point", "")) == "3.5" and o["price"] >= 1.20:
+                                if not any(p["match"] == f"{home} vs {away}" for p in picks):
                                     picks.append({"match": f"{home} vs {away}", "time": commence, "bet": "Menos de 3.5 goles", "odd": round(o["price"], 2)})
                         break
 
     picks = sorted(picks, key=lambda x: x["odd"], reverse=True)[:5]
 
     if not picks:
-        return "❌ No encontré partidos hoy/mañana con cuota mayor de 1.30 para ese mercado."
+        return "No encontre partidos hoy/mañana con cuota mayor de 1.20 para ese mercado."
 
-    titles = {"1X": "🏠 Top 5 partidos *1X*", "over_1.5": "⚽ Top 5 *Más de 1.5 goles*", "under_3.5": "🔒 Top 5 *Menos de 3.5 goles*"}
-    lines = [f"{titles[bet_type]} — hoy/mañana | cuota mín. 1.30", ""]
+    titles = {
+        "1X": "Top 5 partidos 1X",
+        "over_1.5": "Top 5 Mas de 1.5 goles",
+        "under_3.5": "Top 5 Menos de 3.5 goles"
+    }
+    lines = [f"*{titles[bet_type]}* — hoy/manana | cuota min. 1.20", ""]
     for i, p in enumerate(picks, 1):
-        lines.append(f"{i}. ⚽ {p['match']}")
-        lines.append(f"   📅 {p['time']} UTC")
-        lines.append(f"   🎯 {p['bet']}")
-        lines.append(f"   💰 Cuota real: {p['odd']}")
+        lines.append(f"{i}. {p['match']}")
+        lines.append(f"   Hora: {p['time']} UTC")
+        lines.append(f"   Apuesta: {p['bet']}")
+        lines.append(f"   Cuota real: {p['odd']}")
         lines.append("")
 
     lines.append("_Cuotas reales de casas de apuestas europeas._")
     return "\n".join(lines)
 
 async def analyze_match(team1_alias: str, team2_alias: str) -> str:
-    team1_name = resolve_team_name(team1_alias)
-    team2_name = resolve_team_name(team2_alias)
+    team1_key = resolve_team_name(team1_alias)
+    team2_key = resolve_team_name(team2_alias)
 
-    team1_recent = await get_team_recent_matches(team1_name)
-    team2_recent = await get_team_recent_matches(team2_name)
-    odds_info = await get_real_odds(team1_name, team2_name)
+    team1_recent = await get_team_recent_matches(team1_key)
+    team2_recent = await get_team_recent_matches(team2_key)
+    odds_info = await get_real_odds(team1_key, team2_key)
 
-    prompt = f"""Eres un analista experto en fútbol y apuestas deportivas. Analiza este partido con los datos REALES:
+    prompt = f"""Eres un analista experto en futbol y apuestas deportivas. Analiza este partido con los datos REALES proporcionados:
 
-PARTIDO: {team1_name} vs {team2_name}
+PARTIDO: {team1_key.title()} vs {team2_key.title()}
 
-DATOS REALES:
 {team1_recent}
 
-DATOS REALES:
 {team2_recent}
 
-CUOTAS REALES:
 {odds_info}
 
-Responde con este formato EXACTO:
+Usa SOLO estos datos reales para el analisis. No inventes datos. Responde con este formato:
 
-📊 *{team1_name} vs {team2_name}*
+📊 *{team1_key.title()} vs {team2_key.title()}*
 
-🏠 *Local/Visita:* [quién juega en casa]
-🏆 *Competición:* [liga o torneo]
+🏠 *Local/Visita:* [quien juega en casa segun tu conocimiento del calendario]
+🏆 *Competicion:* [liga o torneo]
 
-📈 *Forma reciente {team1_name}:*
-[analiza resultados reales, racha, goles]
+📈 *Forma reciente {team1_key.title()}:*
+[analiza los resultados reales que te di, racha, goles marcados/recibidos en casa y fuera]
 
-📉 *Forma reciente {team2_name}:*
-[analiza resultados reales, racha, goles]
+📉 *Forma reciente {team2_key.title()}:*
+[analiza los resultados reales que te di, racha, goles marcados/recibidos]
 
-💪 *Motivación:*
-- {team1_name}: [objetivos actuales]
-- {team2_name}: [objetivos actuales]
+💪 *Motivacion:*
+- {team1_key.title()}: [objetivos actuales en la clasificacion]
+- {team2_key.title()}: [objetivos actuales en la clasificacion]
 
-⚽ *Análisis de goles:* [tendencia según datos]
+⚽ *Analisis de goles:* [tendencia segun datos reales]
 🟨 *Estimado tarjetas:* [estimado]
 🚩 *Estimado corners:* [estimado]
 
 ---
 🎯 *APUESTA SUGERIDA:*
-✅ Resultado: [ganador o doble oportunidad con %]
-⚽ Goles: [más/menos X.X con %]
-💰 Cuotas reales disponibles: [solo si están en los datos, si no omite]
+✅ Resultado: [ganador o doble oportunidad con porcentaje]
+⚽ Goles: [mas/menos X.X con porcentaje]
+💰 Cuotas reales: [solo si estan disponibles en los datos]
 
-_Análisis basado en datos reales. No garantiza resultado._"""
+_Analisis basado en datos reales. No garantiza resultado._"""
 
     try:
         client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
@@ -306,7 +336,7 @@ _Análisis basado en datos reales. No garantiza resultado._"""
         )
         return message.content[0].text
     except Exception as e:
-        return f"❌ Error al generar análisis: {str(e)}"
+        return f"Error al generar analisis: {str(e)}"
 
 async def get_recommendations(bet_type: str) -> str:
     return await get_upcoming_with_odds(bet_type)
