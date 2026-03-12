@@ -213,6 +213,37 @@ async def get_upcoming_with_odds(bet_type: str) -> str:
                 )
                 if resp.status_code == 200:
                     for g in resp.json():
+                        # Normalizar campos en español a inglés
+                        if "equipo_local" in g:
+                            g["home_team"] = g.get("equipo_local", g.get("home_team", ""))
+                        if "equipo_visitante" in g:
+                            g["away_team"] = g.get("equipo_visitante", g.get("away_team", ""))
+                        if "fecha_de_inicio" in g:
+                            g["commence_time"] = g.get("fecha_de_inicio", g.get("commence_time", ""))
+                        if "casas de apuestas" in g:
+                            g["bookmakers"] = g.get("casas de apuestas", g.get("bookmakers", []))
+                        # Normalizar bookmakers internamente
+                        for bm in g.get("bookmakers", []):
+                            for market in bm.get("markets", bm.get("mercados", [])):
+                                if "mercados" in bm:
+                                    bm["markets"] = bm["mercados"]
+                                outcomes = market.get("outcomes", market.get("resultados", []))
+                                market["outcomes"] = outcomes
+                                for o in outcomes:
+                                    if "nombre" in o:
+                                        o["name"] = o["nombre"]
+                                    if "precio" in o:
+                                        o["price"] = o["precio"]
+                                    if "punto" in o:
+                                        o["point"] = o["punto"]
+                                    # Normalizar Empate/Sorteo a Draw
+                                    if o.get("name") in ["Empate", "Sorteo"]:
+                                        o["name"] = "Draw"
+                                    # Normalizar Más de / Menos de
+                                    if o.get("name") in ["Más de", "Mas de", "Por encima"]:
+                                        o["name"] = "Over"
+                                    if o.get("name") in ["Menos de", "Por debajo de"]:
+                                        o["name"] = "Under"
                         g["sport"] = sport
                         all_games.append(g)
             except Exception:
