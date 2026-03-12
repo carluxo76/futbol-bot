@@ -218,10 +218,15 @@ async def get_upcoming_with_odds(bet_type: str) -> str:
             except Exception:
                 continue
 
+    total_before = len(all_games)
     all_games = [g for g in all_games if is_today_or_tomorrow(g.get("commence_time", ""))]
+    total_after = len(all_games)
 
     if not all_games:
-        return "No encontre partidos para hoy/manana con cuotas disponibles."
+        from datetime import datetime
+        now = datetime.now().astimezone()
+        sample_dates = []
+        return f"Debug: {total_before} partidos totales, {total_after} en rango de fechas. Fecha actual servidor: {now.date()}. Revisa logs."
 
     picks = []
 
